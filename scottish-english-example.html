@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Are you Scottish or English?</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Trucy Phan">
+	<!-- Date: 2012-07-03 -->
+	<style type="text/css">
+	
+	body {
+		font-family: "Helvetica Neue", "Helvetica", "Arial";
+	}
+	
+	.clearfix:after {
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		line-height: 0;
+		height: 0;
+	}
+
+	.clearfix {
+		display: inline-block;
+	}
+
+	html[xmlns] .clearfix {
+		display: block;
+	}
+
+	* html .clearfix {
+		height: 1%;
+	}
+	
+	#questions {
+		width: 10000px;
+		-webkit-transition: margin-left 0.25s ease;
+		-moz-transition: margin-left 0.25s ease;
+		-ms-transition: margin-left 0.25s ease;
+		-o-transition: margin-left 0.25s ease;
+		transition: margin-left 0.25s ease;
+	}
+	
+	#questionsFrame{
+		text-align: center;
+	  width: 600px;
+	  height: 700px;
+	  overflow: hidden;
+	  margin: 0 auto 20px auto;  
+	}
+
+	#questions .question {
+		width: 600px;
+		height:600px;
+	  overflow:hidden;
+	  float:left;
+	  text-align: center;
+		font-size: 14px;
+	}
+	
+	#questions .question p {
+		font-size: 18px;
+	}
+	
+	input[type=submit]{
+		margin-top: 30px;
+	}
+	
+	</style>
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="./js/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="./js/jquery-ui-1.8.21.custom.min.js"></script>
+	
+	<script type="text/javascript">
+
+		var test_x = new Array();
+			
+		$(document).ready(function() {
+			
+			$('input[type=radio], input[type=submit]').click(function(){
+				var pos = $('#questions').css('margin-left').replace('px', '') - 600;
+				$('#questions').css(
+					"margin-left", pos);
+			});
+			
+			$('input[type=radio][name=shortbread]:nth(0)').click(function(){
+				test_x[0] = 1;
+				});
+			$('input:radio[name=shortbread]:nth(1)').click(function(){
+				test_x[0] = 0;
+			});
+			$('input:radio[name=lager]:nth(0)').click(function(){
+				test_x[1] = 1;
+			});
+			$('input:radio[name=lager]:nth(1)').click(function(){
+				test_x[1] = 0;
+			});
+			$('input:radio[name=whiskey]:nth(0)').click(function(){
+				test_x[2] = 1;
+			});
+			$('input:radio[name=whiskey]:nth(1)').click(function(){
+				test_x[2] = 0;
+			});
+			$('input:radio[name=porridge]:nth(0)').click(function(){
+				test_x[3] = 1;
+			});
+			$('input:radio[name=porridge]:nth(1)').click(function(){
+				test_x[3] = 0;
+			});
+			$('input:radio[name=football]:nth(0)').click(function(){
+				test_x[4] = 1;
+			});
+			$('input:radio[name=football]:nth(1)').click(function(){
+				test_x[4] = 0;
+			});			
+
+			$('input[name=submit]').click(function(e){
+				e.preventDefault();
+				/*
+					Loop through all selected radio buttons.
+					
+					Build array and pass to calc_prob.
+				
+				*/
+				calc_prob(test_x);
+				return false;
+			});			
+	
+					
+		});
+
+		</script>
+</head>
+<body>
+
+		<div id="questionsFrame">
+			<h2>Are you Scottish or English?</h2>
+			<form name="input" onsubmit="test()">
+	<div id="questions" class="clearfix">
+
+	<div class="question">
+	<p>1. Do you like shortbread?</p>	
+	<input type="radio" name="shortbread" value="y" /> Yes<br />
+	<input type="radio" name="shortbread" value="n" /> No<br />
+	</div>
+	
+	<div class="question">
+	<p>2. Do you like lager?</p>
+	<input type="radio" name="lager" value="y" /> Yes<br />
+	<input type="radio" name="lager" value="n" /> No<br />
+	</div>
+	
+	<div class="question">
+	<p>3. Do you drink whiskey?</p>
+	<input type="radio" name="whiskey" value="y" /> Yes<br />
+	<input type="radio" name="whiskey" value="n" /> No<br />
+	</div>
+
+	<div class="question">
+	<p>4. Do you eat porridge?</p>
+	<input type="radio" name="porridge" value="y" /> Yes<br />
+	<input type="radio" name="porridge" value="n" /> No<br />
+	</div>
+
+	<div class="question">
+	<p>5. Did you watch England play football?</p>
+	<input type="radio" name="football" value="y" /> Yes<br />
+	<input type="radio" name="football" value="n" /> No<br />
+	</div>
+	
+	<div class="question">
+		<input type="submit" name="submit" id="submit" value="Try me." />
+	</div>
+	
+	<div class="question final">
+	</div>
+	
+	</div>
+	</form>
+	</div>
+	
+	<script type=text/javascript>
+	
+	function calc_prob(newX) {
+
+	/* JavaScript version of this Matlab example: http://www.inf.ed.ac.uk/teaching/courses/lfd/lectures/lfd_2005_naive.pdf
+
+	Classify a person as English or Scottish given their nationality and the following attributes:
+
+	 		* likes shortbread
+			* likes lager
+			* drinks whiskey
+			* eats porridge
+			* watched England play football
+ 		
+			1 reads positive for the attribute and 0 is negative (e.g. does not eat porridge)
+*/
+
+	// English people and their (dis)likes
+	var xE = [
+	  [0, 1, 1, 1, 0, 0], // 1/2
+		[0, 0, 1, 1, 1, 0], // 1/2
+		[1, 1, 0, 0, 0, 0],	// 1/3
+		[1, 1, 1, 0, 0, 1], // 2/3
+		[1, 0, 1, 1, 1, 0], // 2/3
+	];
+
+	// Scottish people and their (dis)likes
+	var xS = [
+		[1, 1, 1, 1, 1, 1, 1], // 1
+		[0, 1, 1, 1, 1, 0, 0], // 4/7
+		[0, 1, 1, 0, 0, 1, 1], // 4/7	
+		[1, 0, 0, 1, 1, 0, 0], // 3/7
+		[1, 1, 0, 0, 1, 0, 0]  // 3/7
+	];
+
+  // probabilities that a person in the db is Scottish or English
+	var pE = xE[0].length/(xE[0].length + xS[0].length); // 6/13
+	var pS = 1 - pE; // 7/13
+
+	var px_E = new Array();
+	var px_S = new Array();
+
+	var calc_px_S = 1;
+	var calc_px_E = 1;
+
+	// initialize arrays with zeros
+
+	for(i=0; i<xE.length; i++) {
+		px_E[i] = 0;
+		px_S[i] = 0;
+	}
+
+	// probability that a given attribute will be positive given that the person is English 
+	for( var i in xE ) { // 5
+		for( var j in xE[0] ) { // 6
+			px_E[i] += xE[i][j]/xE[0].length;
+		}
+		calc_px_E *= px_E[i];
+	}
+
+	// probability that a given attribute will be positive given that the person is Scottish
+	// if x = 1, the average already represents the probability of x = 1
+	// if x = 0, take 1 minus the mean because the rest of the data set is 0's
+	
+	for( i in xS ) { // 5
+		for( j in xS[0] ) { // 7
+			px_S[i] += xS[i][j]/xS[0].length;
+		}
+		if(newX[i] == 1){
+			px_S[i] = px_S[i];
+		}
+		else {
+			px_S[i] = 1 - px_S[i];
+		}
+		calc_px_S *= px_S[i];
+	}
+
+	// calculate the probability of someone being Scottish given set of x (dis)likes
+	// p(S|x) = p(x|S) . p(S) / p(x|S)p(S) + p(x|E)p(E)
+	
+	var prob_S = calc_px_S*pS/((calc_px_S*pS) + (calc_px_E*pE));
+		
+	/*if (prob_S >= 0.5) {
+		document.write('<div class=\"question\"><img src =\"./images/scottish.jpg\" /><p>Congratulations! You\'re Scottish.</p></div>');
+//		return("Congratulations! You're Scottish.");
+	}
+	else if (prob_S == 0.5) {
+		return("Hmm, we're not sure what you are.");
+	}
+	else {
+		return("We think you're English.");
+	}*/
+	
+		if (prob_S >= 0.5) {
+			$('.final').append('<img src ="./images/scottish.jpg" /><p>Congratulations! You\'re Scottish.</p>');
+		}
+		else if (prob_S == 0.5) {
+			$('.final').append('<p>We have no idea what you are!</p>');
+		}
+		else {
+			$('.final').append('<p>We think you are english!</p>');
+		}
+}
+
+</script>
+
+</body>
+</html>
