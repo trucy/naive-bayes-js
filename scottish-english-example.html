@@ -14,6 +14,12 @@
 		font-family: "Helvetica Neue", "Helvetica", "Arial";
 	}
 	
+	a {
+		color: #666;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	
 	.clearfix:after {
 		content: ".";
 		display: block;
@@ -177,6 +183,7 @@
 	</div>
 	
 	<div class="question final">
+		<a href="/">Try again</a>
 	</div>
 	
 	</div>
@@ -277,13 +284,13 @@
 	}*/
 	
 		if (prob_S >= 0.5) {
-			$('.final').append('<img src ="./images/scottish.jpg" /><p>Congratulations! You\'re Scottish.</p>');
+			$('.final').prepend('<img src ="./images/scottish.jpg" /><p>Congratulations! You\'re Scottish.</p>');
 		}
 		else if (prob_S == 0.5) {
-			$('.final').append('<p>We have no idea what you are!</p>');
+			$('.final').prepend('<p>We have no idea what you are!</p>');
 		}
 		else {
-			$('.final').append('<p>We think you are english!</p>');
+			$('.final').prepend('<img src ="./images/english.jpg" /><p>We think you\'re English!</p>');
 		}
 }
 
